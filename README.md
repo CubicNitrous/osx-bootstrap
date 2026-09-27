@@ -28,8 +28,15 @@ You'll be prompted to confirm preference changes and enter your administrator
 password for system-level settings.
 
 Existing dotfiles are preserved as timestamped `.backup.*` files before
-symlinks are created. Keep the repository at this path after setup; the links
-point directly into its `dotfiles/` directory.
+symlinks are created. For example, when cloned to `~/workspace/osx-bootstrap`,
+`~/.zshrc` links to `~/workspace/osx-bootstrap/dotfiles/.zshrc`, and the
+managed `~/.config/*` files link to their matching paths under
+`~/workspace/osx-bootstrap/dotfiles/.config/`. Keep the repository at that
+path: moving or deleting it breaks the links.
+
+To point your home dotfiles at another clone, run that clone's
+`./scripts/setup.sh`. Existing links or files at managed paths are moved to
+timestamped `.backup.*` paths before the new links are created.
 
 If mise cannot update Safari preferences because Terminal or Ghostty lacks
 Full Disk Access, grant access in **System Settings → Privacy & Security →
