@@ -1,25 +1,49 @@
-# Workstation Setup
+# macOS Bootstrap
+
+Bootstrap a clean macOS installation with Homebrew, mise, and the dotfiles in
+this repository.
+
+## Before you start
+
+- Sign in to a macOS administrator account and connect to the internet.
+- Install Apple's Command Line Tools if macOS hasn't installed them yet:
+  `xcode-select --install`.
+
+## Install
+
+Open Terminal or Ghostty and run:
 
 ```sh
 mkdir -p ~/workspace
 cd ~/workspace
-git clone https://github.com/CubicNitrous/workstation-setup.git
-cd workstation-setup
-```
-
-Run the setup with:
-
-```sh
+git clone https://github.com/CubicNitrous/osx-bootstrap.git
+cd osx-bootstrap
 ./scripts/setup.sh
 ```
 
-`Brewfile` declares Homebrew formulae, applications, and VS Code extensions.
-`dotfiles/.config/mise/config.toml` selects the latest Go release. Node.js is
-managed by NVM; add an `.nvmrc` to each project and run `nvm use` there to select
-its version.
-The root `mise.toml` defines the `mise run setup` workflow and declarative macOS
-preferences. The setup applies them with `mise bootstrap macos defaults apply`;
-check for drift later with `mise bootstrap macos defaults status`. Choose your
-timezone in System Settings → General → Date & Time; the remaining shell script
-handles filesystem flags and the per-user screenshot directory. Existing
-dotfiles are kept as timestamped backups before links are created.
+The script installs Homebrew if needed, then `mise run setup` installs the
+packages and apps in `Brewfile`, links the managed dotfiles into your home
+directory, installs configured mise tools, and applies macOS preferences.
+You'll be prompted to confirm preference changes and enter your administrator
+password for system-level settings.
+
+Existing dotfiles are preserved as timestamped `.backup.*` files before
+symlinks are created. Keep the repository at this path after setup; the links
+point directly into its `dotfiles/` directory.
+
+If mise cannot update Safari preferences because Terminal or Ghostty lacks
+Full Disk Access, grant access in **System Settings → Privacy & Security →
+Full Disk Access**, quit and reopen the terminal, then run `./scripts/setup.sh`
+again.
+
+## After setup
+
+- Choose the timezone in **System Settings → General → Date & Time**.
+- Open a new terminal session to load the linked zsh config, NVM, and mise.
+- In a project with an `.nvmrc`, run `nvm install` to install and select its
+  specified Node.js version.
+- Check macOS preference drift with `mise bootstrap macos defaults status`.
+
+Go is managed by mise in `dotfiles/.config/mise/config.toml`. Node.js is managed
+per-project by NVM. Apps, CLI packages, and VS Code extensions are listed in
+`Brewfile`; edit the files in `dotfiles/` to keep your home config synchronized.

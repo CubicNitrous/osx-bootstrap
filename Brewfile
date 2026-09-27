@@ -1,5 +1,6 @@
 brew "gh"
 brew "git"
+brew "eza"
 brew "mas"
 brew "mise"
 brew "nvm"
